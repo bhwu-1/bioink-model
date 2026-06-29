@@ -306,6 +306,56 @@ w_ecm   = 0.20   # Weight: long-term ECM-driven stiffness trajectory            
                  #  — REPLACE all weights with values derived from DOE / optimisation
 
 # =============================================================================
+# CA²⁺ CONCENTRATION-DEPENDENT DIFFUSIVITY
+#
+# Ca²⁺ diffusion slows as alginate concentration increases: the denser gel
+# network increases tortuosity.  Exponential model anchored at nominal (0.5 wt%):
+#
+#   D_Ca_eff(c_alg) = D_Ca * exp(-lambda_D * (c_alg - c_alg_ref))
+#
+# Calibration points:
+#   0.25 wt% → 6.1e-10 m²/s  (open network, near free diffusion)
+#   0.50 wt% → 5.0e-10 m²/s  (nominal, = D_Ca)
+#   1.00 wt% → 3.4e-10 m²/s
+#   1.50 wt% → 2.2e-10 m²/s  (dense gel)
+# =============================================================================
+
+lambda_D  = 0.80     # [1/wt%]  concentration sensitivity exponent             [EST]
+                     #  — REPLACE; fit to pulsed-field-gradient NMR diffusometry
+                     #  across alginate concentration series
+
+D_Ca_min  = 2.0e-10  # [m²/s]  lower bound (dense 1.5% alginate gel)           [EST]
+D_Ca_max  = 7.5e-10  # [m²/s]  upper bound (very dilute; free diffusion = 7.9e-10) [LIT]
+
+
+def D_Ca_eff(c_alg: float) -> float:
+    """
+    Effective Ca²⁺ diffusion coefficient [m²/s] at alginate concentration c_alg [wt%].
+    Decreases exponentially with increasing alginate (more tortuous network).
+    """
+    D = D_Ca * np.exp(-lambda_D * (c_alg - c_alg_ref))
+    return float(np.clip(D, D_Ca_min, D_Ca_max))
+
+
+# =============================================================================
+# SHAPE FIDELITY REFERENCE VALUE
+#
+# SF = t_spread / t_gel  (dimensionless)
+#   SF > 1  : filament gels before significant spreading  → GOOD shape retention
+#   SF < 1  : filament spreads before gelling             → POOR shape retention
+#
+# With diffusion-limited t_gel and viscous t_spread, SF spans ~0.002–0.032
+# across the GBM formulation space.  SF_ref sets the 50% score point:
+#   sf_score = 1 - exp(-SF / SF_ref)
+# =============================================================================
+
+SF_ref = 5.0e-6      # [-]  Shape fidelity score reference (50% score at SF = SF_ref*ln2) [EST]
+                     #  Calibrated to SF range of this system (2e-6 to 3e-5):
+                     #    sf_score(nominal, 0.5%) ≈ 0.82  (good shape)
+                     #    sf_score(low,     0.25%) ≈ 0.35  (poor shape, low viscosity)
+                     #  — retune if sigma_s or K_func parameters are updated
+
+# =============================================================================
 # UNIVERSAL PHYSICAL CONSTANTS  (exact / well-established)
 # =============================================================================
 

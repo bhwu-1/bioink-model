@@ -86,7 +86,7 @@ The published Aspect/UBC operating point (Lee et al. 2019) falls within the high
 ## How to Run
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/bioink_model.git
+git clone https://github.com/bhwu-1/bioink-model.git
 cd bioink_model
 pip install -r requirements.txt
 python main.py

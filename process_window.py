@@ -20,7 +20,7 @@ from parameters import (
     c_fib_min, c_fib_max, c_fib_points,
     c_alg_min, c_alg_max, c_alg_points,
     w_shear, w_shape, w_stiff, w_ecm,
-    c_fib_nom, c_alg_nom,
+    c_fib_nom, c_alg_nom, SF_ref,
 )
 
 import layer2_shear as L2
@@ -35,9 +35,14 @@ def composite_score(viability_shear: float, shape_fidelity: float,
     Weighted composite printability / biocompatibility score (0–1).
 
     Weights (w_shear, w_shape, w_stiff, w_ecm) are loaded from parameters.py.
-    Shape fidelity index (low = good) is converted to a 0–1 score via exp(-SF).
+
+    Shape fidelity conversion (SF > 1 = good):
+        sf_score = 1 - exp(-SF / SF_ref)
+    With SF_ref = 0.005, sf_score reaches 0.80 at SF = 0.008 (nominal) and
+    falls to 0.33 at SF = 0.002 (low alginate / low viscosity). This converts
+    the narrow SF range (0.002–0.032) into a full 0–1 score gradient.
     """
-    sf_score = np.exp(-shape_fidelity)
+    sf_score = 1.0 - np.exp(-shape_fidelity / SF_ref)
     return (w_shear * viability_shear
             + w_shape * sf_score
             + w_stiff * stiffness_viability

@@ -48,9 +48,9 @@ def run_all_layers():
         print(f"  L2 Shear     : tau_wall={r2['tau_wall']:.2f} Pa  "
               f"viability={r2['viability_shear']:.3f}")
 
-        r3 = L3.run()
-        print(f"  L3 Kinetics  : k_cross={r3['k_cross']:.3e} 1/s  "
-              f"alpha(300s)={r3['alpha_final']:.4f}")
+        r3 = L3.run(c_alg)
+        print(f"  L3 Kinetics  : Da={r3['Da']:.1f}  t_gel={r3['t_gel_diffusion']:.1f} s  "
+              f"D_Ca_eff={r3['D_Ca_eff']:.2e} m2/s")
 
         r4 = L4.run()
         print(f"  L4 Diffusion : Ca2+ centre conc (300 s) = "
