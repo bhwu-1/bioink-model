@@ -106,16 +106,17 @@ The model predicts a composite score of 0.84 at **11 mg/mL fibrinogen, 0.78% alg
 
 A one-at-a-time (OAT) sensitivity analysis was run over nine uncertain parameters. The composite score at the nominal formulation point was recorded at +20% and -20% from each parameter's nominal value; the swing |score(+20%) − score(−20%)| ranks their influence.
 
-**The model is most sensitive to the composite score weights** (`w_shear`, `w_shape`, `w_stiff`, `w_ecm`) and to `SF_ref`, the shape fidelity reference value that maps the dimensionless SF index onto a 0–1 score. `D_Ca`, the Ca²⁺ diffusion coefficient, shows moderate sensitivity because it sets the diffusion-limited gelation time (`t_gel = R²/2D`) that controls shape fidelity across the entire formulation space. In contrast, `tau_crit` is a low-sensitivity control — the nominal wall shear stress (7.3 Pa) is far below the 100 Pa threshold, so ±20% shifts in the threshold have negligible effect. Critically, `Ea_cross` and `A_cross` show near-zero sensitivity because the system is firmly diffusion-limited (Da >> 1 everywhere): gelation time is governed by Ca²⁺ diffusion, not reaction kinetics, making these Arrhenius parameters irrelevant to the composite score.
+The model is most sensitive to `w_stiff` (swing = 0.054), the weight assigned to the initial stiffness sub-score, followed by `D_Ca` (swing = 0.031) and `SF_ref` (swing = 0.030). Because the freshly printed gel starts far from the G'_opt = 300 Pa brain-tissue target (~30 Pa), the stiffness sub-score is the lowest-scoring term in the composite — so its weight has an outsized lever on the total. `D_Ca` matters because it sets the diffusion-limited gelation time (`t_gel = R²/2D`) that governs shape fidelity across the entire formulation space. `tau_crit` is a confirmed low-sensitivity control: the nominal wall shear stress (7.3 Pa) is far below the 100 Pa threshold, so even a ±20% shift is inconsequential. `Ea_cross` and `A_cross` show exactly zero sensitivity, confirming that the model is firmly diffusion-limited (Da >> 1) and Arrhenius kinetics do not affect the composite score.
 
-**Experimental validation priority** (highest-impact [EST]/[PLACEHOLDER] parameters first):
+**Experimental validation priority** (highest-swing [EST]/[PLACEHOLDER] parameters first):
 
-| Parameter | Tag | Why it matters |
-|---|---|---|
-| `w_shear`, `w_shape`, `w_stiff`, `w_ecm` | [EST] | Weights directly scale the score — derive from a DOE or cell-biology importance ranking |
-| `SF_ref` | [EST] | Sets the sensitivity of the shape-fidelity sub-score; calibrate once rheology data fixes SF range |
-| `D_Ca` | [LIT] | Moderate sensitivity; validate with pulsed-field-gradient NMR at your exact alginate concentration |
-| `Ea_cross`, `A_cross` | [EST]/[PLACEHOLDER] | Near-zero sensitivity — safe to deprioritise for publication |
+| Parameter | Swing | Tag | Why it matters |
+|---|---|---|---|
+| `w_stiff` | 0.054 | [EST] | Highest single-parameter influence — derive all weights from a DOE or cell-biology ranking |
+| `D_Ca` | 0.031 | [LIT] | Moderate sensitivity; validate with pulsed-field-gradient NMR at your exact alginate concentration |
+| `SF_ref` | 0.030 | [EST] | Calibrate once rheology data fixes the SF range for your printer/ink |
+| `w_shear`, `w_ecm` | 0.026, 0.024 | [EST] | Secondary weight sensitivity — include in the same DOE as `w_stiff` |
+| `Ea_cross`, `A_cross` | 0.000 | [EST]/[PLACEHOLDER] | Zero sensitivity — safe to deprioritise for publication |
 
 ---
 
