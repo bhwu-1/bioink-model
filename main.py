@@ -8,6 +8,7 @@ formulations, then executes the 2-D process window sweep and saves figures.
 """
 
 import os
+import sys
 import numpy as np
 
 os.makedirs("figures", exist_ok=True)
@@ -20,6 +21,7 @@ import layer5_shape as L5
 import layer6_stiffness as L6
 import layer7_ecm as L7
 import process_window as PW
+import sensitivity as SA
 from parameters import c_Ca_bath, t_culture
 
 # Representative formulation points to evaluate
@@ -89,8 +91,20 @@ def run_process_window():
     PW.run()
 
 
+def run_sensitivity():
+    print("\n" + "=" * 65)
+    print("SENSITIVITY ANALYSIS  (OAT +/-20%)")
+    print("=" * 65)
+    SA.main()
+
+
 if __name__ == "__main__":
     run_all_layers()
     run_layer_figures()
     run_process_window()
+
+    # Run sensitivity analysis when --sensitivity flag is passed
+    if "--sensitivity" in sys.argv:
+        run_sensitivity()
+
     print("\nDone. All figures saved to ./figures/")

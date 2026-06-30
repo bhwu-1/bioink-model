@@ -98,13 +98,36 @@ The model predicts a composite score of 0.84 at **11 mg/mL fibrinogen, 0.78% alg
 
 ---
 
+## Model Sensitivity
+
+![Sensitivity Tornado](figures/sensitivity_tornado.png)
+
+*Tornado chart: each bar is the swing in composite score at the nominal formulation (20 mg/mL fibrinogen, 0.5 wt% alginate) when the parameter is varied ±20% (weights shifted ±0.05). Larger swing = greater influence on model predictions.*
+
+A one-at-a-time (OAT) sensitivity analysis was run over nine uncertain parameters. The composite score at the nominal formulation point was recorded at +20% and -20% from each parameter's nominal value; the swing |score(+20%) − score(−20%)| ranks their influence.
+
+**The model is most sensitive to the composite score weights** (`w_shear`, `w_shape`, `w_stiff`, `w_ecm`) and to `SF_ref`, the shape fidelity reference value that maps the dimensionless SF index onto a 0–1 score. `D_Ca`, the Ca²⁺ diffusion coefficient, shows moderate sensitivity because it sets the diffusion-limited gelation time (`t_gel = R²/2D`) that controls shape fidelity across the entire formulation space. In contrast, `tau_crit` is a low-sensitivity control — the nominal wall shear stress (7.3 Pa) is far below the 100 Pa threshold, so ±20% shifts in the threshold have negligible effect. Critically, `Ea_cross` and `A_cross` show near-zero sensitivity because the system is firmly diffusion-limited (Da >> 1 everywhere): gelation time is governed by Ca²⁺ diffusion, not reaction kinetics, making these Arrhenius parameters irrelevant to the composite score.
+
+**Experimental validation priority** (highest-impact [EST]/[PLACEHOLDER] parameters first):
+
+| Parameter | Tag | Why it matters |
+|---|---|---|
+| `w_shear`, `w_shape`, `w_stiff`, `w_ecm` | [EST] | Weights directly scale the score — derive from a DOE or cell-biology importance ranking |
+| `SF_ref` | [EST] | Sets the sensitivity of the shape-fidelity sub-score; calibrate once rheology data fixes SF range |
+| `D_Ca` | [LIT] | Moderate sensitivity; validate with pulsed-field-gradient NMR at your exact alginate concentration |
+| `Ea_cross`, `A_cross` | [EST]/[PLACEHOLDER] | Near-zero sensitivity — safe to deprioritise for publication |
+
+---
+
 ## How to Run
 
 ```bash
 git clone https://github.com/bhwu-1/bioink-model.git
 cd bioink_model
 pip install -r requirements.txt
-python main.py
+python main.py                   # all layers + process window
+python main.py --sensitivity     # also runs OAT sensitivity analysis
+python sensitivity.py            # sensitivity analysis standalone
 ```
 
 All figures are saved to `figures/` at 200 dpi.
@@ -124,6 +147,7 @@ bioink_model/
 ├── layer6_stiffness.py    Gel modulus and mechanosensing score
 ├── layer7_ecm.py          Neural ECM deposition and stiffness evolution
 ├── process_window.py      2D formulation sweep and composite score map
+├── sensitivity.py         OAT parameter sensitivity analysis + tornado plot
 ├── main.py                Entry point
 ├── figures/               All output figures (200 dpi)
 └── requirements.txt
