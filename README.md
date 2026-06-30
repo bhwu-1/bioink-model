@@ -18,7 +18,7 @@ The current standard treatment consists of surgical resection followed by concur
 
 ![Process Window](figures/process_window.png)
 
-*The white star marks the published Aspect Biosystems operating point (20 mg/mL fibrinogen, 0.5% alginate, Lee et al. 2019).*
+*The white star marks the published Aspect Biosystems operating point (20 mg/mL fibrinogen, 0.5% alginate, Lee et al. 2019). The yellow star marks the model-predicted optimum (11 mg/mL fibrinogen, 0.78% alginate).*
 
 The process window is a heatmap of composite scores across 400 formulations (20×20 grid: fibrinogen 10–30 mg/mL × alginate 0.25–1.5%). Each score is a weighted sum of four sub-scores: shear-induced cell viability, filament shape fidelity, initial gel stiffness match to brain tissue, and long-term ECM stiffness after 30 days of culture.
 
@@ -87,13 +87,14 @@ The model predicts a composite score of 0.84 at **11 mg/mL fibrinogen, 0.78% alg
 
 | Layer | Figure |
 |---|---|
-| L1:Viscosity | ![](figures/layer1_viscosity.png) |
-| L2:Shear Stress | ![](figures/layer2_shear.png) |
-| L3:Kinetics | ![](figures/layer3_kinetics.png) |
-| L4:Ca²⁺ Diffusion | ![](figures/layer4_diffusion.png) |
-| L5:Shape Fidelity | ![](figures/layer5_shape.png) |
-| L6:Stiffness | ![](figures/layer6_stiffness.png) |
-| L7:ECM Evolution | ![](figures/layer7_ecm.png) |
+| L1: Viscosity | ![](figures/layer1_viscosity.png) |
+| | |
+| L2: Shear Stress | ![](figures/layer2_shear.png) |
+| L3: Kinetics | ![](figures/layer3_kinetics.png) |
+| L4: Ca²⁺ Diffusion | ![](figures/layer4_diffusion.png) |
+| L5: Shape Fidelity | ![](figures/layer5_shape.png) |
+| L6: Stiffness | ![](figures/layer6_stiffness.png) |
+| L7: ECM Evolution | ![](figures/layer7_ecm.png) |
 
 ---
 
