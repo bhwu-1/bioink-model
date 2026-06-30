@@ -69,12 +69,12 @@ def plot(save_path: str = "figures/layer2_shear.png"):
         (1.00, 20,  "1.00%\n20 mg/mL"),
         (1.50, 30,  "1.50%\n30 mg/mL"),
     ]
-    colors = ["#4daf4a", "#377eb8", "#ff7f00", "#e41a1c"]
+    colors = ["#a8d1e7", "#5ba3c9", "#2171b5", "#08306b"]
 
     results = [run(c_alg, c_fib) for c_alg, c_fib, _ in test_points]
     taus      = [r["tau_wall"]        for r in results]
     viabs     = [r["viability_shear"] for r in results]
-    bar_colors = ["#4daf4a" if t < tau_crit else "#e41a1c" for t in taus]
+    bar_colors = ["#27ae60" if t < tau_crit else "#c0392b" for t in taus]
     labels    = [p[2] for p in test_points]
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 5))
@@ -85,28 +85,34 @@ def plot(save_path: str = "figures/layer2_shear.png"):
                 label=f"tau_crit = {tau_crit:.0f} Pa  (neural cells)")
     for bar, tau in zip(bars, taus):
         ax1.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.5,
-                 f"{tau:.1f}", ha="center", va="bottom", fontsize=9)
-    ax1.set_ylabel("Wall Shear Stress [Pa]", fontsize=11)
-    ax1.set_title("Wall Shear Stress by Formulation", fontsize=11)
-    ax1.legend(fontsize=9)
+                 f"{tau:.1f}", ha="center", va="bottom", fontsize=10)
+    ax1.set_ylabel("Wall Shear Stress [Pa]", fontsize=12, fontweight="bold")
+    ax1.set_title("Wall Shear Stress by Formulation", fontsize=13, fontweight="bold")
+    ax1.legend(fontsize=10)
     ax1.set_ylim(0, max(taus) * 1.35)
+    for spine in ax1.spines.values():
+        spine.set_linewidth(1.5)
+    ax1.tick_params(width=1.5, labelsize=11)
 
     # --- Right: sigmoidal viability curve ---
     tau_range = np.linspace(0, 200, 400)
     viab_curve = np.array([cell_viability_shear(t) for t in tau_range])
-    ax2.plot(tau_range, viab_curve, "b-", linewidth=2.5)
+    ax2.plot(tau_range, viab_curve, color="#2171b5", linewidth=2.5)
     ax2.axvline(tau_crit, color="red", linestyle="--", linewidth=1.5,
                 label=f"tau_crit = {tau_crit:.0f} Pa")
     for (c_alg, c_fib, _), color, tau, viab in zip(test_points, colors, taus, viabs):
         ax2.plot(tau, viab, "o", color=color, markersize=9, zorder=5)
-    ax2.set_xlabel("Wall Shear Stress [Pa]", fontsize=11)
-    ax2.set_ylabel("Cell Viability Score", fontsize=11)
-    ax2.set_title("Sigmoidal Viability Function\n(neural / GBM cells)", fontsize=11)
-    ax2.legend(fontsize=9)
+    ax2.set_xlabel("Wall Shear Stress [Pa]", fontsize=12, fontweight="bold")
+    ax2.set_ylabel("Cell Viability Score", fontsize=12, fontweight="bold")
+    ax2.set_title("Sigmoidal Viability Function\n(neural / GBM cells)", fontsize=13, fontweight="bold")
+    ax2.legend(fontsize=10)
     ax2.set_ylim(0, 1.05)
     ax2.grid(True, alpha=0.3)
+    for spine in ax2.spines.values():
+        spine.set_linewidth(1.5)
+    ax2.tick_params(width=1.5, labelsize=11)
 
-    fig.suptitle("Layer 2 — Shear-Induced Cell Damage", fontsize=13)
+    fig.suptitle("Layer 2: Shear-Induced Cell Damage", fontsize=15, fontweight="bold")
     fig.tight_layout()
     fig.savefig(save_path, dpi=200)
     print(f"Saved {save_path}")

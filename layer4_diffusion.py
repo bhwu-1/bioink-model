@@ -108,17 +108,20 @@ def plot(save_path: str = "figures/layer4_diffusion.png"):
 
     ax.axvline(R_channel * 1e6, color="k", linestyle=":", linewidth=1.2,
                alpha=0.6, label="Filament surface")
-    ax.set_xlabel("Radial Position [um]", fontsize=12)
-    ax.set_ylabel("Ca2+ Concentration [mol/m3]", fontsize=12)
+    ax.set_xlabel("Radial Position [um]", fontsize=12, fontweight="bold")
+    ax.set_ylabel("Ca2+ Concentration [mol/m3]", fontsize=12, fontweight="bold")
     ax.set_title(
-        "Layer 4 — Ca2+ Radial Diffusion\n"
+        "Layer 4: Ca2+ Radial Diffusion\n"
         "Crosslinking front propagation into the filament (Fick's 2nd Law, cylindrical)",
-        fontsize=11,
+        fontsize=14, fontweight="bold",
     )
     ax.set_xlim(0, R_channel * 1e6)
     ax.set_ylim(0, c_Ca_bath * 1.05)
-    ax.legend(fontsize=9)
+    ax.legend(fontsize=10)
     ax.grid(True, alpha=0.3)
+    for spine in ax.spines.values():
+        spine.set_linewidth(1.5)
+    ax.tick_params(width=1.5, labelsize=11)
     fig.tight_layout()
     fig.savefig(save_path, dpi=200)
     print(f"Saved {save_path}")

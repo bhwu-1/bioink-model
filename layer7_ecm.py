@@ -108,7 +108,7 @@ def plot(save_path: str = "figures/layer7_ecm.png"):
         (1.00, 20,  "1.00% alg / 20 mg/mL fib"),
         (1.50, 30,  "1.50% alg / 30 mg/mL fib"),
     ]
-    colors = ["#4daf4a", "#377eb8", "#ff7f00", "#e41a1c"]
+    colors = ["#a8d1e7", "#5ba3c9", "#2171b5", "#08306b"]
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
@@ -120,21 +120,27 @@ def plot(save_path: str = "figures/layer7_ecm.png"):
 
     ax1.axhline(G_prime_opt, color="red", linestyle="--", linewidth=1.5,
                 label=f"G_opt = {G_prime_opt:.0f} Pa  (brain tissue)")
-    ax1.set_xlabel("Culture Time [days]", fontsize=11)
-    ax1.set_ylabel("Effective Modulus G'_eff [Pa]", fontsize=11)
-    ax1.set_title("ECM-Driven Stiffness Evolution\n(30-day culture)", fontsize=11)
-    ax1.legend(fontsize=8)
+    ax1.set_xlabel("Culture Time [days]", fontsize=12, fontweight="bold")
+    ax1.set_ylabel("Effective Modulus G'_eff [Pa]", fontsize=12, fontweight="bold")
+    ax1.set_title("ECM-Driven Stiffness Evolution\n(30-day culture)", fontsize=13, fontweight="bold")
+    ax1.legend(fontsize=10)
     ax1.grid(True, alpha=0.3)
+    for spine in ax1.spines.values():
+        spine.set_linewidth(1.5)
+    ax1.tick_params(width=1.5, labelsize=11)
 
     ax2.axhline(1.0, color="gray", linestyle=":", linewidth=1, alpha=0.5)
-    ax2.set_xlabel("Culture Time [days]", fontsize=11)
-    ax2.set_ylabel("Stiffness Viability Score", fontsize=11)
-    ax2.set_title("Mechanosensing Score Over 30 Days", fontsize=11)
-    ax2.legend(fontsize=8)
+    ax2.set_xlabel("Culture Time [days]", fontsize=12, fontweight="bold")
+    ax2.set_ylabel("Stiffness Viability Score", fontsize=12, fontweight="bold")
+    ax2.set_title("Mechanosensing Score Over 30 Days", fontsize=13, fontweight="bold")
+    ax2.legend(fontsize=10)
     ax2.set_ylim(0, 1.05)
     ax2.grid(True, alpha=0.3)
+    for spine in ax2.spines.values():
+        spine.set_linewidth(1.5)
+    ax2.tick_params(width=1.5, labelsize=11)
 
-    fig.suptitle("Layer 7 — Neural ECM Deposition & Stiffness Evolution", fontsize=13)
+    fig.suptitle("Layer 7: Neural ECM Deposition & Stiffness Evolution", fontsize=15, fontweight="bold")
     fig.tight_layout()
     fig.savefig(save_path, dpi=200)
     print(f"Saved {save_path}")

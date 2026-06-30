@@ -86,35 +86,41 @@ def plot(save_path: str = "figures/layer3_kinetics.png"):
     t_gel_vals = [t_gel_diffusion(c)  for c in c_alg_range]
 
     test_points = [(0.25, "0.25%"), (0.50, "0.50% (nom.)"), (1.00, "1.00%"), (1.50, "1.50%")]
-    colors = ["#4daf4a", "#377eb8", "#ff7f00", "#e41a1c"]
+    colors = ["#a8d1e7", "#5ba3c9", "#2171b5", "#08306b"]
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 5))
 
     # --- Left: Da vs c_alg ---
-    ax1.plot(c_alg_range, Da_vals, "b-", linewidth=2.5)
+    ax1.plot(c_alg_range, Da_vals, color="#2171b5", linewidth=2.5)
     ax1.axhline(1.0, color="red", linestyle="--", linewidth=1.2,
                 label="Da = 1  (reaction-limited threshold)")
     for (c, lbl), col in zip(test_points, colors):
         ax1.plot(c, damkohler_number(c), "o", color=col, markersize=9,
                  zorder=5, label=f"{lbl}  Da={damkohler_number(c):.0f}")
-    ax1.set_xlabel("Alginate Concentration [wt%]", fontsize=11)
-    ax1.set_ylabel("Damkohler Number  Da", fontsize=11)
-    ax1.set_title("Crosslinking Regime\nDa >> 1 = diffusion-limited everywhere", fontsize=11)
-    ax1.legend(fontsize=8)
+    ax1.set_xlabel("Alginate Concentration [wt%]", fontsize=12, fontweight="bold")
+    ax1.set_ylabel("Damkohler Number  Da", fontsize=12, fontweight="bold")
+    ax1.set_title("Crosslinking Regime\nDa >> 1 = diffusion-limited everywhere", fontsize=13, fontweight="bold")
+    ax1.legend(fontsize=10)
     ax1.grid(True, alpha=0.3)
+    for spine in ax1.spines.values():
+        spine.set_linewidth(1.5)
+    ax1.tick_params(width=1.5, labelsize=11)
 
     # --- Right: t_gel_diffusion vs c_alg ---
-    ax2.plot(c_alg_range, t_gel_vals, "b-", linewidth=2.5)
+    ax2.plot(c_alg_range, t_gel_vals, color="#2171b5", linewidth=2.5)
     for (c, lbl), col in zip(test_points, colors):
         ax2.plot(c, t_gel_diffusion(c), "o", color=col, markersize=9, zorder=5,
                  label=f"{lbl}  t_gel={t_gel_diffusion(c):.1f} s")
-    ax2.set_xlabel("Alginate Concentration [wt%]", fontsize=11)
-    ax2.set_ylabel("Diffusion-Limited t_gel [s]", fontsize=11)
-    ax2.set_title("Gelation Time (diffusion-limited)\nIncreases with alginate concentration", fontsize=11)
-    ax2.legend(fontsize=8)
+    ax2.set_xlabel("Alginate Concentration [wt%]", fontsize=12, fontweight="bold")
+    ax2.set_ylabel("Diffusion-Limited t_gel [s]", fontsize=12, fontweight="bold")
+    ax2.set_title("Gelation Time (diffusion-limited)\nIncreases with alginate concentration", fontsize=13, fontweight="bold")
+    ax2.legend(fontsize=10)
     ax2.grid(True, alpha=0.3)
+    for spine in ax2.spines.values():
+        spine.set_linewidth(1.5)
+    ax2.tick_params(width=1.5, labelsize=11)
 
-    fig.suptitle("Layer 3 — Ca-Alginate Crosslinking: Damkohler Analysis", fontsize=13)
+    fig.suptitle("Layer 3: Ca-Alginate Crosslinking: Damkohler Analysis", fontsize=15, fontweight="bold")
     fig.tight_layout()
     fig.savefig(save_path, dpi=200)
     print(f"Saved {save_path}")

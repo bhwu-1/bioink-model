@@ -59,7 +59,7 @@ def plot(save_path: str = "figures/layer6_stiffness.png"):
         (1.00, 20,  "1.00%\n20 mg/mL"),
         (1.50, 30,  "1.50%\n30 mg/mL"),
     ]
-    colors  = ["#4daf4a", "#377eb8", "#ff7f00", "#e41a1c"]
+    colors  = ["#a8d1e7", "#5ba3c9", "#2171b5", "#08306b"]
     results = [run(c_alg, c_fib) for c_alg, c_fib, _ in test_points]
     G_vals  = [r["G_prime"]             for r in results]
     scores  = [r["stiffness_viability"] for r in results]
@@ -73,28 +73,34 @@ def plot(save_path: str = "figures/layer6_stiffness.png"):
                 label=f"G_opt = {G_prime_opt:.0f} Pa  (brain tissue)")
     for bar, G in zip(bars, G_vals):
         ax1.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,
-                 f"{G:.1f}", ha="center", va="bottom", fontsize=9)
-    ax1.set_ylabel("Storage Modulus G' [Pa]", fontsize=11)
-    ax1.set_title("Initial Gel Stiffness\nby Formulation", fontsize=11)
-    ax1.legend(fontsize=9)
+                 f"{G:.1f}", ha="center", va="bottom", fontsize=10)
+    ax1.set_ylabel("Storage Modulus G' [Pa]", fontsize=12, fontweight="bold")
+    ax1.set_title("Initial Gel Stiffness\nby Formulation", fontsize=13, fontweight="bold")
+    ax1.legend(fontsize=10)
+    for spine in ax1.spines.values():
+        spine.set_linewidth(1.5)
+    ax1.tick_params(width=1.5, labelsize=11)
 
     # --- Right: Gaussian mechanosensing curve ---
     G_range = np.linspace(0, 900, 500)
     M_curve = np.array([stiffness_viability(g) for g in G_range])
-    ax2.plot(G_range, M_curve, "b-", linewidth=2.5, label="Mechanosensing score M(G')")
+    ax2.plot(G_range, M_curve, color="#2171b5", linewidth=2.5, label="Mechanosensing score M(G')")
     ax2.axvline(G_prime_opt, color="red", linestyle="--", linewidth=1.5,
                 label=f"G_opt = {G_prime_opt:.0f} Pa")
     for (c_alg, c_fib, lbl), color, G, score in zip(test_points, colors, G_vals, scores):
         ax2.plot(G, score, "o", color=color, markersize=9, zorder=5,
                  label=lbl.replace("\n", " "))
-    ax2.set_xlabel("Storage Modulus G' [Pa]", fontsize=11)
-    ax2.set_ylabel("Mechanosensing Score M", fontsize=11)
-    ax2.set_title("Gaussian Mechanosensing Score\nvs Substrate Stiffness", fontsize=11)
-    ax2.legend(fontsize=8, loc="upper right")
+    ax2.set_xlabel("Storage Modulus G' [Pa]", fontsize=12, fontweight="bold")
+    ax2.set_ylabel("Mechanosensing Score M", fontsize=12, fontweight="bold")
+    ax2.set_title("Gaussian Mechanosensing Score\nvs Substrate Stiffness", fontsize=13, fontweight="bold")
+    ax2.legend(fontsize=10, loc="upper right")
     ax2.set_ylim(0, 1.05)
     ax2.grid(True, alpha=0.3)
+    for spine in ax2.spines.values():
+        spine.set_linewidth(1.5)
+    ax2.tick_params(width=1.5, labelsize=11)
 
-    fig.suptitle("Layer 6 — Gel Stiffness & Cell Mechanosensing", fontsize=13)
+    fig.suptitle("Layer 6: Gel Stiffness & Cell Mechanosensing", fontsize=15, fontweight="bold")
     fig.tight_layout()
     fig.savefig(save_path, dpi=200)
     print(f"Saved {save_path}")

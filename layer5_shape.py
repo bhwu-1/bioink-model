@@ -94,7 +94,7 @@ def plot(save_path: str = "figures/layer5_shape.png"):
         (1.00, 20,  "1.00%\n20 mg/mL"),
         (1.50, 30,  "1.50%\n30 mg/mL"),
     ]
-    colors = ["#4daf4a", "#377eb8", "#ff7f00", "#e41a1c"]
+    colors = ["#a8d1e7", "#5ba3c9", "#2171b5", "#08306b"]
 
     results   = [run(c_alg, c_fib) for c_alg, c_fib, _ in test_points]
     sfs       = [r["shape_fidelity"] for r in results]
@@ -105,34 +105,40 @@ def plot(save_path: str = "figures/layer5_shape.png"):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 5))
 
     # --- Left: SF index bars (SF > 1 = good = green) ---
-    bar_colors = ["#4daf4a" if sf > 1 else "#e41a1c" for sf in sfs]
+    bar_colors = ["#27ae60" if sf > 1 else "#c0392b" for sf in sfs]
     bars = ax1.bar(labels, sfs, color=bar_colors, edgecolor="k", linewidth=0.8)
     ax1.axhline(1.0, color="red", linestyle="--", linewidth=1.5,
                 label="SF = 1.0  (gelation = spreading)")
     for bar, sf in zip(bars, sfs):
         ax1.text(bar.get_x() + bar.get_width() / 2,
                  bar.get_height() + max(sfs) * 0.02,
-                 f"{sf:.4f}", ha="center", va="bottom", fontsize=9)
-    ax1.set_ylabel("Shape Fidelity Index  SF = t_spread / t_gel", fontsize=10)
-    ax1.set_title("Shape Fidelity Index\n(SF > 1 = good; green = gels before spreading)", fontsize=11)
-    ax1.legend(fontsize=9)
+                 f"{sf:.4f}", ha="center", va="bottom", fontsize=10)
+    ax1.set_ylabel("Shape Fidelity Index  SF = t_spread / t_gel", fontsize=12, fontweight="bold")
+    ax1.set_title("Shape Fidelity Index\n(SF > 1 = good; green = gels before spreading)", fontsize=13, fontweight="bold")
+    ax1.legend(fontsize=10)
+    for spine in ax1.spines.values():
+        spine.set_linewidth(1.5)
+    ax1.tick_params(width=1.5, labelsize=11)
 
     # --- Right: t_gel vs t_spread (log scale) ---
     x = np.arange(len(labels))
     w = 0.35
     ax2.bar(x - w / 2, t_gels,    w, label="t_gel [s]  (diffusion-limited)",
-            color="#377eb8", edgecolor="k")
+            color="#2171b5", edgecolor="k")
     ax2.bar(x + w / 2, t_spreads, w, label="t_spread [s]  (viscous spreading)",
-            color="#ff7f00", edgecolor="k")
+            color="#e67e22", edgecolor="k")
     ax2.set_xticks(x)
-    ax2.set_xticklabels(labels, fontsize=9)
+    ax2.set_xticklabels(labels, fontsize=10)
     ax2.set_yscale("log")
-    ax2.set_ylabel("Time [s]  (log scale)", fontsize=11)
-    ax2.set_title("Diffusion t_gel vs Viscous t_spread\n(gap narrows at high alginate)", fontsize=11)
-    ax2.legend(fontsize=9)
+    ax2.set_ylabel("Time [s]  (log scale)", fontsize=12, fontweight="bold")
+    ax2.set_title("Diffusion t_gel vs Viscous t_spread\n(gap narrows at high alginate)", fontsize=13, fontweight="bold")
+    ax2.legend(fontsize=10)
     ax2.grid(True, which="both", axis="y", alpha=0.3)
+    for spine in ax2.spines.values():
+        spine.set_linewidth(1.5)
+    ax2.tick_params(width=1.5, labelsize=11)
 
-    fig.suptitle("Layer 5 — Filament Shape Fidelity  (diffusion-limited gelation)", fontsize=13)
+    fig.suptitle("Layer 5: Filament Shape Fidelity (diffusion-limited gelation)", fontsize=15, fontweight="bold")
     fig.tight_layout()
     fig.savefig(save_path, dpi=200)
     print(f"Saved {save_path}")

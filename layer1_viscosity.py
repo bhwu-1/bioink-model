@@ -62,7 +62,7 @@ def plot(save_path: str = "figures/layer1_viscosity.png"):
         (1.00, 20,  "1.00% alg / 20 mg/mL fib"),
         (1.50, 30,  "1.50% alg / 30 mg/mL fib"),
     ]
-    colors = ["#4daf4a", "#377eb8", "#ff7f00", "#e41a1c"]
+    colors = ["#a8d1e7", "#5ba3c9", "#2171b5", "#08306b"]
     gamma_range = np.logspace(0, 3, 300)   # 1 – 1000 1/s
 
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -81,11 +81,14 @@ def plot(save_path: str = "figures/layer1_viscosity.png"):
                label=f"RX1 nozzle  ({gamma_op:.0f} 1/s)")
     ax.plot(gamma_op, eta_op, "k*", markersize=13, zorder=5)
 
-    ax.set_xlabel("Shear Rate [1/s]", fontsize=12)
-    ax.set_ylabel("Apparent Viscosity [Pa·s]", fontsize=12)
-    ax.set_title("Layer 1 — Bioink Viscosity\nPower Law model, fibrin–alginate", fontsize=12)
-    ax.legend(fontsize=9)
+    ax.set_xlabel("Shear Rate [1/s]", fontsize=12, fontweight="bold")
+    ax.set_ylabel("Apparent Viscosity [Pa·s]", fontsize=12, fontweight="bold")
+    ax.set_title("Layer 1: Bioink Viscosity\nPower Law model, fibrin–alginate", fontsize=14, fontweight="bold")
+    ax.legend(fontsize=10)
     ax.grid(True, which="both", alpha=0.3)
+    for spine in ax.spines.values():
+        spine.set_linewidth(1.5)
+    ax.tick_params(width=1.5, labelsize=11)
     fig.tight_layout()
     fig.savefig(save_path, dpi=200)
     print(f"Saved {save_path}")
