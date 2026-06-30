@@ -104,19 +104,19 @@ The model predicts a composite score of 0.84 at **11 mg/mL fibrinogen, 0.78% alg
 
 *Tornado chart: each bar is the swing in composite score at the nominal formulation (20 mg/mL fibrinogen, 0.5 wt% alginate) when the parameter is varied ±20% (weights shifted ±0.05). Larger swing = greater influence on model predictions.*
 
-A one-at-a-time (OAT) sensitivity analysis was run over nine uncertain parameters. The composite score at the nominal formulation point was recorded at +20% and -20% from each parameter's nominal value; the swing |score(+20%) − score(−20%)| ranks their influence.
+Each parameter was varied ±20% from its nominal value while holding everything else fixed. The score at the nominal formulation (20 mg/mL fibrinogen, 0.5 wt% alginate) was recorded at both extremes; the difference between them ("swing") measures how much that parameter moves the model's output.
 
-The model is most sensitive to `w_stiff` (swing = 0.054), the weight assigned to the initial stiffness sub-score, followed by `D_Ca` (swing = 0.031) and `SF_ref` (swing = 0.030). Because the freshly printed gel starts far from the G'_opt = 300 Pa brain-tissue target (~30 Pa), the stiffness sub-score is the lowest-scoring term in the composite — so its weight has an outsized lever on the total. `D_Ca` matters because it sets the diffusion-limited gelation time (`t_gel = R²/2D`) that governs shape fidelity across the entire formulation space. `tau_crit` is a confirmed low-sensitivity control: the nominal wall shear stress (7.3 Pa) is far below the 100 Pa threshold, so even a ±20% shift is inconsequential. `Ea_cross` and `A_cross` show exactly zero sensitivity, confirming that the model is firmly diffusion-limited (Da >> 1) and Arrhenius kinetics do not affect the composite score.
+The model is most sensitive to `w_stiff`, the weight controlling how much the initial gel stiffness contributes to the composite score. This is high because the freshly printed gel (~30 Pa) starts far below the brain-tissue target (300 Pa), so the stiffness sub-score is already the weakest term — shifting its weight up or down has a large effect. `D_Ca` ranks second because it controls how fast Ca²⁺ diffuses into the filament, which sets the gelation time and therefore the shape fidelity score. `tau_crit` and the Arrhenius kinetics parameters (`Ea_cross`, `A_cross`) show little to no sensitivity — the wall shear stress at the nominal formulation (7.3 Pa) is far below the damage threshold, and gelation is governed by diffusion rather than reaction speed.
 
-**Experimental validation priority** (highest-swing [EST]/[PLACEHOLDER] parameters first):
+**Experimental validation priority:**
 
 | Parameter | Swing | Tag | Why it matters |
 |---|---|---|---|
-| `w_stiff` | 0.054 | [EST] | Highest single-parameter influence — derive all weights from a DOE or cell-biology ranking |
-| `D_Ca` | 0.031 | [LIT] | Moderate sensitivity; validate with pulsed-field-gradient NMR at your exact alginate concentration |
-| `SF_ref` | 0.030 | [EST] | Calibrate once rheology data fixes the SF range for your printer/ink |
-| `w_shear`, `w_ecm` | 0.026, 0.024 | [EST] | Secondary weight sensitivity — include in the same DOE as `w_stiff` |
-| `Ea_cross`, `A_cross` | 0.000 | [EST]/[PLACEHOLDER] | Zero sensitivity — safe to deprioritise for publication |
+| `w_stiff` | 0.054 | [EST] | The most influential parameter — all four weights should be set based on experimental cell data rather than guessed |
+| `D_Ca` | 0.031 | [LIT] | Physically meaningful sensitivity — worth measuring directly for your specific ink formulation |
+| `SF_ref` | 0.030 | [EST] | Controls the shape fidelity scoring curve — calibrate once you have rheology data |
+| `w_shear`, `w_ecm` | 0.026, 0.024 | [EST] | Secondary weight effects — set alongside `w_stiff` |
+| `Ea_cross`, `A_cross` | 0.000 | [EST]/[PLACEHOLDER] | No effect on the score — do not need to be measured before publication |
 
 ---
 
