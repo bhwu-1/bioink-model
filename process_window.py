@@ -119,14 +119,21 @@ def plot_process_window(FIB_grid, ALG_grid, scores,
     """Composite score heatmap with nominal formulation marker."""
     fig, ax = plt.subplots(figsize=(8, 6))
     cf = ax.contourf(FIB_grid, ALG_grid, scores, levels=20,
-                     cmap="RdYlGn", vmin=0, vmax=1)
-    cs = ax.contour(FIB_grid, ALG_grid, scores, levels=[0.4, 0.6, 0.8],
+                     cmap="RdYlGn", vmin=0.55, vmax=0.85)
+    cs = ax.contour(FIB_grid, ALG_grid, scores, levels=[0.65, 0.72, 0.80],
                     colors="k", linewidths=0.8)
-    ax.clabel(cs, fmt="%.1f", fontsize=8)
-    plt.colorbar(cf, ax=ax, label="Composite Score (0–1)")
+    ax.clabel(cs, fmt="%.2f", fontsize=8)
+    plt.colorbar(cf, ax=ax, label="Composite Score")
 
     ax.plot(c_fib_nom, c_alg_nom, "w*", markersize=14,
             label=f"Nominal ({c_fib_nom:.0f} mg/mL, {c_alg_nom} wt%)")
+
+    best_idx = np.unravel_index(np.argmax(scores), scores.shape)
+    best_fib = FIB_grid[best_idx]
+    best_alg = ALG_grid[best_idx]
+    ax.plot(best_fib, best_alg, "y*", markersize=14,
+            label=f"Predicted optimum ({best_fib:.0f} mg/mL, {best_alg:.2f} wt%)")
+
     ax.legend(fontsize=8, loc="upper left")
 
     ax.set_xlabel("Fibrinogen Concentration [mg/mL]")
