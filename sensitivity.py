@@ -336,14 +336,17 @@ def plot_tornado(results, base,
                 bar.get_y() + bar.get_height() / 2,
                 f"{swing:.4f}", va="center", ha="left", fontsize=9)
 
-    # Tag legend
+    # Tag legend — only show tags that appear in the chart
+    present_tags = set(tags)
+    all_patches = [
+        ("[LIT]",         "[LIT] — literature (included as sensitivity control)"),
+        ("[EST]",         "[EST] — estimated, needs experimental validation"),
+        ("[PLACEHOLDER]", "[PLACEHOLDER] — rough order of magnitude"),
+    ]
     legend_patches = [
-        mpatches.Patch(color=_TAG_COLORS["[LIT]"],
-                       label="[LIT] — literature (included as sensitivity control)"),
-        mpatches.Patch(color=_TAG_COLORS["[EST]"],
-                       label="[EST] — estimated, needs experimental validation"),
-        mpatches.Patch(color=_TAG_COLORS["[PLACEHOLDER]"],
-                       label="[PLACEHOLDER] — rough order of magnitude"),
+        mpatches.Patch(color=_TAG_COLORS[tag], label=label)
+        for tag, label in all_patches
+        if tag in present_tags
     ]
     ax.legend(handles=legend_patches, fontsize=9, loc="lower right", framealpha=0.85)
 
