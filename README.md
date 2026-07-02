@@ -112,11 +112,11 @@ The model is most sensitive to `w_stiff`, the weight controlling how much the in
 
 | Parameter | Swing | Tag | Why it matters |
 |---|---|---|---|
-| `w_stiff` | 0.054 | [EST] | The most influential parameter — all four weights should be set based on experimental cell data rather than guessed |
-| `D_Ca` | 0.031 | [LIT] | Physically meaningful sensitivity — worth measuring directly for your specific ink formulation |
-| `SF_ref` | 0.030 | [EST] | Controls the shape fidelity scoring curve — calibrate once you have rheology data |
-| `w_shear`, `w_ecm` | 0.026, 0.024 | [EST] | Secondary weight effects — set alongside `w_stiff` |
-| `Ea_cross`, `A_cross` | 0.000 | [EST]/[PLACEHOLDER] | No effect on the score — do not need to be measured before publication |
+| `w_stiff` | 0.054 | [EST] | The most influential parameter. All four weights should be set from experimental cell data, not guessed. |
+| `D_Ca` | 0.031 | [LIT] | Physically meaningful sensitivity. Worth measuring directly for your specific ink formulation. |
+| `SF_ref` | 0.030 | [EST] | Controls the shape fidelity scoring curve. Calibrate once you have rheology data. |
+| `w_shear`, `w_ecm` | 0.026, 0.024 | [EST] | Secondary weight effects. Set alongside `w_stiff`. |
+| `Ea_cross`, `A_cross` | 0.000 | [EST]/[PLACEHOLDER] | No effect on the score. Does not need to be measured before publication. |
 
 ---
 
